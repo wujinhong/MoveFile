@@ -1,7 +1,6 @@
-/**
+/*
  * Created by Gordon on 13/05/2017.
  */
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -18,32 +17,32 @@ import javafx.scene.text.Font;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
 import org.apache.commons.io.FileUtils;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
 
 public class Main extends Application
 {
 
     private static final Color color = Color.web( "#FF0000" );
-    Button button3 = new Button( "选择图片文件夹" );
-    Button startBtn = new Button( "开始" );
-    DropShadow shadow = new DropShadow();
-    Label label = new Label();
-    Label dirLabel = new Label();
-    Label descLabel = new Label();
-    String dirPath;
-    String moveRule;
-    File chosenDir;
-    private final Desktop desktop = Desktop.getDesktop();
+    private Button button3 = new Button( "选择图片文件夹" );
+    private Button startBtn = new Button( "开始" );
+    private DropShadow shadow = new DropShadow();
+    private Label label = new Label();
+    private Label dirLabel = new Label();
+    private Label descLabel = new Label();
+    private String dirPath;
+    private String moveRule;
+    private File chosenDir;
+//    private final Desktop desktop = Desktop.getDesktop();
 
-    final FileChooser fileChooser = new FileChooser();
-    final DirectoryChooser directoryChooser = new DirectoryChooser();
+    private final FileChooser fileChooser = new FileChooser();
+    private final DirectoryChooser directoryChooser = new DirectoryChooser();
 
     public static void main( String[] args )
     {
@@ -71,8 +70,8 @@ public class Main extends Application
         VBox vbox = new VBox();
         vbox.setLayoutX( 20 );
         vbox.setLayoutY( 20 );
-        HBox hbox1 = new HBox();
-        HBox hbox2 = new HBox();
+        HBox hBox1 = new HBox();
+        HBox hBox2 = new HBox();
 
 
         Button button2 = new Button( "规则文本" );
@@ -98,24 +97,20 @@ public class Main extends Application
 
         addEventListener();
 
-        button2.addEventHandler( MouseEvent.MOUSE_ENTERED, ( MouseEvent e ) ->
-        {
-            button2.setEffect( shadow );
-        } );
+        button2.addEventHandler( MouseEvent.MOUSE_ENTERED,  e ->
+            button2.setEffect( shadow )
+        );
 
         button2.addEventHandler( MouseEvent.MOUSE_EXITED, ( MouseEvent e ) ->
-        {
-            button2.setEffect( null );
-        } );
+            button2.setEffect( null )
+        );
         button3.addEventHandler( MouseEvent.MOUSE_ENTERED, ( MouseEvent e ) ->
-        {
-            button3.setEffect( shadow );
-        } );
+            button3.setEffect( shadow )
+        );
 
         button3.addEventHandler( MouseEvent.MOUSE_EXITED, ( MouseEvent e ) ->
-        {
-            button3.setEffect( null );
-        } );
+            button3.setEffect( null )
+        );
 
         button3.setOnAction( ( ActionEvent e ) ->
         {
@@ -134,22 +129,22 @@ public class Main extends Application
             }
         } );
 
-        hbox1.getChildren().add( button2 );
+        hBox1.getChildren().add( button2 );
         label.setLayoutY( 30 );
-        hbox1.getChildren().add( label );
-        hbox1.setSpacing( 10 );
-        hbox1.setAlignment( Pos.BOTTOM_CENTER );
+        hBox1.getChildren().add( label );
+        hBox1.setSpacing( 10 );
+        hBox1.setAlignment( Pos.BOTTOM_LEFT );
 
-        hbox2.getChildren().add( button3 );
+        hBox2.getChildren().add( button3 );
         dirLabel.setLayoutY( 30 );
         descLabel.setLayoutY( 60 );
-        hbox2.getChildren().add( dirLabel );
-        hbox2.getChildren().add( descLabel );
-        hbox2.setSpacing( 25 );
+        hBox2.getChildren().add( dirLabel );
+        hBox2.getChildren().add( descLabel );
+        hBox2.setSpacing( 25 );
 
-        vbox.getChildren().add( hbox1 );
-        hbox2.setLayoutY( 50 );
-        vbox.getChildren().add( hbox2 );
+        vbox.getChildren().add( hBox1 );
+        hBox2.setLayoutY( 50 );
+        vbox.getChildren().add( hBox2 );
         vbox.getChildren().add( startBtn );
         vbox.setSpacing( 10 );
         ( (Group) scene.getRoot() ).getChildren().add( vbox );
@@ -178,11 +173,11 @@ public class Main extends Application
         } );
     }
 
-    protected void move( String[] paths )
+    private void move( String[] paths )
     {
         String[] extensions = { "json", "png", "jpg", "fnt", "mp3" };
         Iterator<File> fileIterator = FileUtils.iterateFiles( chosenDir, extensions, true );
-        int length = paths.length;
+//        int length = paths.length;
         while( fileIterator.hasNext() )
         {
             File file = fileIterator.next();
@@ -190,7 +185,27 @@ public class Main extends Application
             {
                 continue;
             }
-            for( int i = 0; i < length; i++ )
+            for( String path : paths )
+            {
+                String name = file.getName();
+                if( !path.contains( name ) )
+                {
+                    continue;
+                }
+
+                System.out.println( file.getName() + " 移动到 " + path );
+                try
+                {
+                    FileUtils.moveFileToDirectory( file, new File( path.split( name )[0] ), true );
+                }
+                catch( IOException exception )
+                {
+                    System.out.println( file.getName() + " 移动到 " + path + "出错" );
+                    exception.printStackTrace();
+                }
+                break;
+            }
+            /*for( int i = 0; i < length; i++ )
             {
                 String path = paths[i];
                 String name = file.getName();
@@ -210,11 +225,11 @@ public class Main extends Application
                     System.out.println( exception );
                 }
                 break;
-            }
+            }*/
         }
     }
 
-    private void openFile( File file )
+    /*private void openFile( File file )
     {
         EventQueue.invokeLater( () ->
         {
@@ -229,5 +244,5 @@ public class Main extends Application
                         log( Level.SEVERE, null, ex );
             }
         } );
-    }
+    }*/
 }
