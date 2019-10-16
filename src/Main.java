@@ -26,6 +26,11 @@ import java.util.Iterator;
 //import java.util.logging.Level;
 //import java.util.logging.Logger;
 
+/**
+ * 使用OpenJDK开发JavaFx
+ * 设置VM options如下:
+ * --module-path ${FX_PATH} --add-modules javafx.controls,javafx.fxml
+ */
 public class Main extends Application
 {
 
